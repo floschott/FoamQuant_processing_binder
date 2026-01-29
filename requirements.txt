@@ -1,13 +1,13 @@
 matplotlib==3.10.0
     # via
     #   -r requirements.in
-numpy==2.2.0
+numpy==1.23.5
     # via
     #   -r requirements.in
 matplotlib-inline==0.1.6
 scikit-image==0.25.2
 tifffile==2024.12.12
-pandas==2.3.0
+pandas==2.1.0
     # via
     #   -r requirements.in
-scipy==1.9.3
+scipy==1.11.0
