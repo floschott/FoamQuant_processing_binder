@@ -414,8 +414,8 @@ def RemoveBackground_BatchHome(series, rawdir, prossdir, imrange, method='white_
         imifordir = strindex(imi, n0w)
         
         if Binning!=None:
-            import spam.DIC
-            image = spam.DIC.deform.binning(image, Binning)
+            import spam.DIC.deform.binning as binning
+            image = binning(image, Binning)
             imsave(prossdir + '/2_RemoveBackground/' + series + '/' + series+'_RemoveBackground_Bin'+str(Binning)+'_'+imifordir, image, bigtiff=True)
         else:
             imsave(prossdir + '/2_RemoveBackground/' + series + '/' + series+'_RemoveBackground_'+imifordir, image, bigtiff=True)
@@ -464,8 +464,8 @@ def RemoveBackground_Batch(nameread, namesave, dirread, dirsave, imrange, method
         image = imread(dirread + nameread + imifordir + endread)
         
         if Binning!=None:
-            import spam.DIC
-            image = spam.DIC.deform.binning(image, Binning)
+            import spam.DIC.deform.binning as binning
+            image = binning(image, Binning)
         
         # remove background
         image = RemoveBackground(image, method=method, radius=radius)
@@ -727,8 +727,11 @@ def BubbleSegmentation_Batch(nameread, namesave, dirread, dirsave, imrange, verb
     if not isExist:
         print('Error: saving path does not exist', dirsave)
         return
+    if Binning != None:
+        import spam.DIC.deform.binning as binning
     if ITK:
-        import spam.label
+        import spam.label.ITKwatershed.watershed as watershedITK
+        
     else:
         # write parameters
         if writeparameters:
@@ -754,10 +757,10 @@ def BubbleSegmentation_Batch(nameread, namesave, dirread, dirsave, imrange, verb
         # if binning
         if Binning != None:
             import spam.DIC
-            image = spam.DIC.deform.binning(image, Binning)
+            image = binning(image, Binning)
         # Bubble segmentation
         if ITK:
-            image = spam.label.ITKwatershed.watershed(image, markers=None, watershedLevel=ITKLevel)
+            image = watershedITK(image, markers=None, watershedLevel=ITKLevel)
         else:
             SigSeeds = SigSeeds//Binning
             SigWatershed = SigWatershed//Binning
